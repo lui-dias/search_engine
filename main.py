@@ -96,16 +96,17 @@ class Parser:
 
             link = self._sanitize_link(i.attrs['href'])
 
-            if not self.robots.can_fetch(user_agent, link) or not self._is_link_alive(
-                link
-            ):
+            if link.startswith('#'):
                 continue
 
             if link.startswith('/'):
                 up = urlparse(self.seed)
 
                 link = f'{up.scheme}://{up.netloc}{link}'
-            elif link.startswith('#'):
+
+            if not self.robots.can_fetch(user_agent, link) or not self._is_link_alive(
+                link
+            ):
                 continue
 
             crawled_links.add(link)
