@@ -1,0 +1,7 @@
+click
+regex
+alive_progress
+nltk
+peewee
+requests
+selectolax
