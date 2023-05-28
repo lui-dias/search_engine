@@ -96,7 +96,9 @@ class Parser:
 
             link = self._sanitize_link(i.attrs['href'])
 
-            if not self.robots.can_fetch(user_agent, link):
+            if not self.robots.can_fetch(user_agent, link) or not self._is_link_alive(
+                link
+            ):
                 continue
 
             if link.startswith('/'):
