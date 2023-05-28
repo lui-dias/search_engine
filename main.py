@@ -87,7 +87,7 @@ class Parser:
     def get_links(self, link: str):
         sleep(self.delay)
 
-        crawled_links = set()
+        crawled_links = [link]
         html = self._parse_html(link)
 
         for i in html.css('a'):
@@ -96,22 +96,22 @@ class Parser:
 
             link = self._sanitize_link(i.attrs['href'])
 
-            if link.startswith('#'):
-                continue
-
             if link.startswith('/'):
                 up = urlparse(self.seed)
 
                 link = f'{up.scheme}://{up.netloc}{link}'
+
+            if not link.startswith('http'):
+                continue
 
             if not self.robots.can_fetch(user_agent, link) or not self._is_link_alive(
                 link
             ):
                 continue
 
-            crawled_links.add(link)
+            crawled_links.append(link)
 
-        return list(crawled_links)
+        return list(dict.fromkeys(crawled_links))
 
     def get_metadata(self, link: str):
         html = self._parse_html(link)
